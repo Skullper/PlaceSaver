@@ -6,11 +6,15 @@ package skullper.place.saver.base.presentation;
   company - A2Lab
  */
 
-public abstract class BasePresenter<T extends BaseView>{
+/**
+ * Base class for each presenter in project
+ * @param <V> view used by presenter to interact with activity
+ */
+public abstract class BasePresenter<V extends BaseView>{
 
-	protected T view;
+	protected V view;
 
-	public BasePresenter(T view){
+	public BasePresenter(V view){
 		this.view = view;
 	}
 

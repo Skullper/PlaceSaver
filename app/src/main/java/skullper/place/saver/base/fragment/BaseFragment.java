@@ -29,8 +29,7 @@ import skullper.place.saver.base.presentation.BaseView;
  * @param <A> parent activity for created fragment. Info: {@link #activity}
  * @param <P> presenter for created fragment. The instance should be passed in {@link #createPresenter()} method
  */
-public abstract class BaseFragment<A extends BaseActivity, P extends BasePresenter> extends Fragment
-        implements BaseView {
+public abstract class BaseFragment<A extends BaseActivity, P extends BasePresenter> extends Fragment implements BaseView {
 
     protected P presenter;
 
@@ -82,8 +81,7 @@ public abstract class BaseFragment<A extends BaseActivity, P extends BasePresent
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null || presenter == null) {
             rootView = inflater.inflate(getLayoutId(), container, false);
             unBinder = ButterKnife.bind(this, rootView);
@@ -123,7 +121,7 @@ public abstract class BaseFragment<A extends BaseActivity, P extends BasePresent
      * @param fragment    new fragment
      */
     protected void replaceFragment(@IdRes int containerId, BaseFragment fragment) {
-        getChildFragmentManager().beginTransaction().replace(containerId, fragment, fragment.tag())
+        getChildFragmentManager().beginTransaction().replace(containerId, fragment, fragment.tag()) //
                 .commitAllowingStateLoss();
     }
 
@@ -134,7 +132,7 @@ public abstract class BaseFragment<A extends BaseActivity, P extends BasePresent
      * @param fragment    new fragment
      */
     protected void addFragment(@IdRes int containerId, BaseFragment fragment) {
-        getChildFragmentManager().beginTransaction().add(containerId, fragment, fragment.tag())
+        getChildFragmentManager().beginTransaction().add(containerId, fragment, fragment.tag()) //
                 .commitAllowingStateLoss();
     }
 

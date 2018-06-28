@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!--Common-->
+	<dimen name="layout_margin">16dp</dimen>
+
+	<!--Views-->
+	<dimen name="rounded_view_corner">5dp</dimen>
+	<dimen name="btn_height">38dp</dimen>
+	<dimen name="btn_start_end_padding">24dp</dimen>
+	<dimen name="btn_top_bot_padding">4dp</dimen>
+
+	<!--Login-->
+	<dimen name="auth_btn_bottom_margin">50dp</dimen>
+</resources>

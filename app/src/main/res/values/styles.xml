@@ -1,17 +1,30 @@
 <resources>
 
-	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+	<style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
 		<item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+		<item name="android:buttonStyle">@style/AppButton</item>
     </style>
 
-	<style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+	<style name="AppTheme.SplashTheme">
 		<item name="android:windowBackground">@drawable/bg_splash</item>
 		<item name="android:navigationBarColor">@android:color/transparent</item>
 		<item name="windowNoTitle">true</item>
 		<item name="android:windowFullscreen">true</item>
 		<item name="android:statusBarColor">@android:color/transparent</item>
+	</style>
+
+	<style name="AppButton" parent="Widget.AppCompat.Button">
+		<item name="android:background">@drawable/shape_rounded_view</item>
+		<item name="android:textAllCaps">false</item>
+		<item name="android:textColor">@color/colorPrimary</item>
+		<item name="android:minHeight">@dimen/btn_height</item>
+		<item name="android:paddingStart">@dimen/btn_start_end_padding</item>
+		<item name="android:paddingEnd">@dimen/btn_start_end_padding</item>
+		<item name="android:paddingTop">@dimen/btn_top_bot_padding</item>
+		<item name="android:paddingBottom">@dimen/btn_top_bot_padding</item>
+		<item name="android:gravity">center</item>
 	</style>
 
 </resources>

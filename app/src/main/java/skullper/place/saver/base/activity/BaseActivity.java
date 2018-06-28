@@ -96,7 +96,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
      */
     protected void addFragment(@IdRes int containerId, @NonNull BaseFragment fragment) {
         getSupportFragmentManager().beginTransaction()//
-                .add(containerId, fragment, fragment.tag()).addToBackStack(fragment.tag()).commitAllowingStateLoss();
+                .add(containerId, fragment, fragment.tag()).addToBackStack(fragment.tag()) //
+                .commitAllowingStateLoss();
     }
 
     /**

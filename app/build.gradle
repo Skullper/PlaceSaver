@@ -28,6 +28,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //support + google
     implementation "com.android.support:appcompat-v7:${versions.support}"
+    implementation ("com.google.android.gms:play-services-auth:${versions.sign_in}"){
+        //excluding this because of error caused by module version. Use old 26.1.0
+        exclude group: 'com.android.support', module: 'support-media-compat'
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
     //views
     implementation "com.jakewharton:butterknife:${versions.butter}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${versions.butter}"

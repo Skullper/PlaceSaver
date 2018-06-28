@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">PlaceSaver</string>
+
+	<!--Login activity-->
+	<string name="auth_btn">Sign in</string>
+
+	<!--Exceptions-->
+	<string name="no_connection_error">Check your network connection and try again</string>
+	<string name="auth_canceled">Sign in was canceled</string>
+	<string name="auth_in_progress">Sign in still in progress. Wait a minute please</string>
+	<string name="auth_failed">Cannot login</string>
+	<string name="auth_developer_error">Check API credentials</string>
 </resources>

@@ -28,6 +28,7 @@ task clean(type: Delete) {
 
 ext.versions = [
         support : "27.1.1",
+        sign_in : "15.0.1",
         butter : "8.8.1",
         timber : "4.7.0"
 ]
