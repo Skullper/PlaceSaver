@@ -5,6 +5,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 		<item name="android:buttonStyle">@style/AppButton</item>
+		<item name="editTextStyle">@style/AppEditText</item>
     </style>
 
 	<style name="AppTheme.SplashTheme">
@@ -25,6 +26,20 @@
 		<item name="android:paddingTop">@dimen/btn_top_bot_padding</item>
 		<item name="android:paddingBottom">@dimen/btn_top_bot_padding</item>
 		<item name="android:gravity">center</item>
+	</style>
+
+	<style name="AppButton.Borderless" parent="Widget.AppCompat.Button.Borderless">
+		<item name="android:textAllCaps">true</item>
+	</style>
+
+	<style name="AppEditText" parent="Base.V7.Widget.AppCompat.EditText">
+		<item name="android:background">@drawable/shape_rounded_view</item>
+		<item name="android:textColor">@color/colorPrimaryText</item>
+		<item name="android:minHeight">@dimen/btn_height</item>
+		<item name="android:textColorHint">@color/colorSecondaryText</item>
+		<item name="android:textCursorDrawable">@null</item>
+		<item name="android:padding">@dimen/small_view_padding</item>
+		<item name="android:textSize">@dimen/et_text_size</item>
 	</style>
 
 </resources>

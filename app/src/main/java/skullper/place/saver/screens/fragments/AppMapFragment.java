@@ -2,12 +2,16 @@ package skullper.place.saver.screens.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -15,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -32,7 +37,7 @@ import skullper.place.saver.utils.LocationHelper;
  */
 
 public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> //
-        implements OnMapReadyCallback, LocationHelper.OnCurrentLocationListener {
+        implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, LocationHelper.OnCurrentLocationListener {
 
     private static final int RC_PERMISSIONS = 785;
 
@@ -68,7 +73,13 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        map.setOnMapLongClickListener(this);
         checkLocationPermission();
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        showPlaceCreationDialog(latLng);
     }
 
     @Override
@@ -107,13 +118,41 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     private void selectCurrentLocation(Location location) {
         LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
         map.addMarker(new MarkerOptions().position(coordinates).title("Current position"));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
-        map.animateCamera(CameraUpdateFactory.zoomIn());
+        map.moveCamera(CameraUpdateFactory.newLatLng(coordinates));
+        map.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
 
     private void fetchUserLocation() {
         progressBar.setVisibility(View.VISIBLE);
         helper.retrieveLocation();
+    }
+
+    private void showPlaceCreationDialog(LatLng latLng) {
+        View view = View.inflate(activity, R.layout.dialog_create_place, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity).setView(view).setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        EditText etName = view.findViewById(R.id.et_dialog_place);
+        view.findViewById(R.id.btn_dialog_place_cancel).setOnClickListener(v -> dialog.dismiss());
+        view.findViewById(R.id.btn_dialog_place_ok).setOnClickListener(v -> {
+            // TODO: 29.06.18 save to db
+            String placeName = etName.getText().toString();
+            if (!placeName.isEmpty() && !placeName.contains(" ")) {
+                map.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory //
+                        .fromBitmap(createMarkerBitmap())).title(placeName).position(latLng));
+                dialog.dismiss();
+            } else {
+                Toast.makeText(activity, R.string.dialog_place_no_name_exception, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private Bitmap createMarkerBitmap() {
+        int markerSize = activity.getResources().getDimensionPixelSize(R.dimen.place_marker_size);
+        Bitmap bitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_gbk);
+        Bitmap markerBitmap = Bitmap.createScaledBitmap(bitmap, markerSize, markerSize, false);
+        bitmap.recycle();
+        return markerBitmap;
     }
 
     //Required by Google MapView

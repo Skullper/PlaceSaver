@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PlaceSaver</string>
-	<string name="google_maps_api_key" translatable="false">AIzaSyBB_nhnsleKvgOb6ZX1M1XiEnfEUvT5TpM</string>
+	<string name="google_maps_api_key"
+		translatable="false">AIzaSyBB_nhnsleKvgOb6ZX1M1XiEnfEUvT5TpM</string>
 
 	<!--Login activity-->
 	<string name="auth_btn">Sign in</string>
@@ -19,6 +20,11 @@
 
 	<!--Map-->
 	<string name="map_loading_toast">Fetching your coordinates…</string>
+	<string name="dialog_place_creation_title">Give a name to your selected point and create it!\nLeave a mark in history!</string>
+	<string name="dialog_place_hint">Place name</string>
+	<string name="dialog_place_no_name_exception">You better type a name first</string>
+
 	<!--Content descriptions-->
 	<string name="cd_arrow_right">Simple arrow added in list item</string>
+	<string name="cd_place">Image title in place creation dialog</string>
 </resources>
