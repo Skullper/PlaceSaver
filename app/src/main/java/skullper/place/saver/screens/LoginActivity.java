@@ -1,7 +1,6 @@
 package skullper.place.saver.screens;
 
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -12,6 +11,8 @@ import skullper.place.saver.R;
 import skullper.place.saver.base.activity.BaseActivity;
 import skullper.place.saver.mvp.presenters.LoginPresenter;
 import skullper.place.saver.mvp.views.LoginView;
+import skullper.place.saver.providers.impl.TempStorage;
+import skullper.place.saver.providers.impl.Toaster;
 
 /**
  * Created by skullper on 28.06.18.
@@ -36,7 +37,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     protected void initViews() {
-        initGoogleSignInClient();
+        if (TempStorage.getInstance().getEmail().isEmpty()) {
+            initGoogleSignInClient();
+        } else {
+            onLoggedIn();
+        }
     }
 
     @Override
@@ -54,7 +59,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void onLoginError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toaster.getInstance().toast(message);
     }
 
     @OnClick(R.id.login_btn)

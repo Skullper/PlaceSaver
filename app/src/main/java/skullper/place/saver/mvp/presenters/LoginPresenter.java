@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.Task;
 import skullper.place.saver.R;
 import skullper.place.saver.base.presentation.BasePresenter;
 import skullper.place.saver.mvp.views.LoginView;
+import skullper.place.saver.providers.impl.TempStorage;
 
 import static skullper.place.saver.utils.StringUtils.getString;
 
@@ -26,7 +27,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     public void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            // TODO: 28.06.18 Save data into local storage
+            TempStorage.getInstance().saveEmail(account.getEmail() != null ? account.getEmail() : "");
+            TempStorage.getInstance().saveAvatarPhotoUrl(account.getPhotoUrl() != null //
+                    ? account.getPhotoUrl().toString() : "");
             view.onLoggedIn();
         } catch (ApiException e) {
             view.onLoginError(handleGoogleSignInStatusCode(e.getStatusCode()));

@@ -17,22 +17,20 @@
 
         <activity android:name=".screens.SplashActivity"
 			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.SplashTheme">
-
-        </activity>
-
-		<activity android:name=".screens.LoginActivity"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme.SplashTheme"/>
-
-		<activity android:name=".screens.MainActivity"
-			android:screenOrientation="portrait">
+			android:theme="@style/SplashTheme">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-		</activity>
+        </activity>
+
+		<activity android:name=".screens.LoginActivity"
+			android:screenOrientation="portrait"
+			android:theme="@style/SplashTheme"/>
+
+		<activity android:name=".screens.MainActivity"
+			android:screenOrientation="portrait"/>
 
 		<meta-data
 			android:name="com.google.android.geo.API_KEY"

@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +25,7 @@ import skullper.place.saver.R;
 import skullper.place.saver.base.EmptyPresenter;
 import skullper.place.saver.base.fragment.BaseFragment;
 import skullper.place.saver.data.PlaceItem;
+import skullper.place.saver.providers.impl.Toaster;
 import skullper.place.saver.screens.MainActivity;
 import skullper.place.saver.utils.LocationHelper;
 import skullper.place.saver.utils.PlaceItemRenderer;
@@ -92,7 +92,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     @Override
     public void onLocationReady(Location location) {
         progressBar.setVisibility(View.GONE);
-        Toast.makeText(activity, R.string.map_loading_toast, Toast.LENGTH_SHORT).show();
+        Toaster.getInstance().toast(R.string.map_loading_toast);
         selectCurrentLocation(location);
     }
 
@@ -173,7 +173,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
                 addPlace(new PlaceItem(latLng, placeName));
                 dialog.dismiss();
             } else {
-                Toast.makeText(activity, R.string.dialog_place_no_name_exception, Toast.LENGTH_SHORT).show();
+                Toaster.getInstance().toast(R.string.dialog_place_no_name_exception);
             }
         });
     }
