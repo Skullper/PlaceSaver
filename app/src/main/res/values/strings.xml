@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">PlaceSaver</string>
+	<string name="google_maps_api_key" translatable="false">AIzaSyBB_nhnsleKvgOb6ZX1M1XiEnfEUvT5TpM</string>
 
 	<!--Login activity-->
 	<string name="auth_btn">Sign in</string>

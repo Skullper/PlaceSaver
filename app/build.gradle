@@ -30,7 +30,8 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${versions.support}"
     implementation "com.android.support:design:${versions.support}"
     implementation "com.android.support.constraint:constraint-layout:${versions.contraint}"
-    implementation("com.google.android.gms:play-services-auth:${versions.sign_in}") {
+    implementation "com.google.android.gms:play-services-maps:${versions.play_services}"
+    implementation("com.google.android.gms:play-services-auth:${versions.play_services}") {
         //excluding this because of error caused by module version. Use old 26.1.0
         exclude group: 'com.android.support', module: 'support-media-compat'
         exclude group: 'com.android.support', module: 'support-v4'
