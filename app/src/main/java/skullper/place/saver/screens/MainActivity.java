@@ -1,5 +1,6 @@
 package skullper.place.saver.screens;
 
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 
 import butterknife.BindView;
@@ -57,5 +58,10 @@ public class MainActivity extends BaseActivity<EmptyPresenter> implements TabLay
         tableLayout.addTab(tableLayout.newTab().setText(R.string.tab_list));
         tableLayout.addTab(tableLayout.newTab().setText(R.string.tab_map));
         tableLayout.addTab(tableLayout.newTab().setText(R.string.tab_profile));
+    }
+
+    @Nullable
+    private AppMapFragment getMapFragment(){
+        return (AppMapFragment) getSupportFragmentManager().findFragmentById(R.id.container_main);
     }
 }

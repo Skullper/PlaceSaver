@@ -3,6 +3,9 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
 		android:name=".App"
 		android:allowBackup="true"
@@ -15,11 +18,7 @@
         <activity android:name=".screens.SplashActivity"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
 		<activity android:name=".screens.LoginActivity"
@@ -27,7 +26,13 @@
 			android:theme="@style/AppTheme.SplashTheme"/>
 
 		<activity android:name=".screens.MainActivity"
-			android:screenOrientation="portrait"/>
+			android:screenOrientation="portrait">
+			<intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+		</activity>
 
 		<meta-data
 			android:name="com.google.android.geo.API_KEY"
