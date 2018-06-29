@@ -3,13 +3,28 @@
 
 	<!--Common-->
 	<dimen name="layout_margin">16dp</dimen>
+	<dimen name="view_padding">16dp</dimen>
+	<dimen name="small_view_padding">8dp</dimen>
 
 	<!--Views-->
 	<dimen name="rounded_view_corner">5dp</dimen>
 	<dimen name="btn_height">38dp</dimen>
 	<dimen name="btn_start_end_padding">24dp</dimen>
 	<dimen name="btn_top_bot_padding">4dp</dimen>
+	<dimen name="elevation">2dp</dimen>
+	<dimen name="elevation_disabled">0dp</dimen>
 
-	<!--Login-->
+	<!--LoginActivity-->
 	<dimen name="auth_btn_bottom_margin">50dp</dimen>
+
+	<!--MainActivity-->
+	<dimen name="main_tab_layout_height">56dp</dimen>
+
+	<!--Places-->
+	<dimen name="place_item_height">88dp</dimen>
+
+	<!--TextSizes-->
+	<dimen name="place_item_title_text_size">16sp</dimen>
+	<dimen name="place_item_data_text_size">12sp</dimen>
+
 </resources>

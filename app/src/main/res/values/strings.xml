@@ -10,4 +10,12 @@
 	<string name="auth_in_progress">Sign in still in progress. Wait a minute please</string>
 	<string name="auth_failed">Cannot login</string>
 	<string name="auth_developer_error">Check API credentials</string>
+
+	<!--MainActivity-->
+	<string name="tab_list">Places</string>
+	<string name="tab_map">Map</string>
+	<string name="tab_profile">Profile</string>
+
+	<!--Content descriptions-->
+	<string name="cd_arrow_right">Simple arrow added in list item</string>
 </resources>

@@ -25,6 +25,9 @@
 		<activity android:name=".screens.LoginActivity"
 			android:screenOrientation="portrait"
 			android:theme="@style/AppTheme.SplashTheme"/>
+
+		<activity android:name=".screens.MainActivity"
+			android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

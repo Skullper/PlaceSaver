@@ -49,7 +49,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void onLoggedIn() {
-        Toast.makeText(this, "Hola!", Toast.LENGTH_SHORT).show();
+        startAffinity(new Intent(this, MainActivity.class));
     }
 
     @Override
