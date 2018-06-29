@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="@dimen/place_cluster_size"
+	android:layout_height="@dimen/place_cluster_size"
+	android:padding="@dimen/tiny_View_padding">
+
+	<ImageView
+		android:id="@+id/iv_cluster_item"
+		android:contentDescription="@string/cd_cluster"
+		android:layout_width="@dimen/place_cluster_size"
+		android:src="@drawable/ic_gbk"
+		android:layout_height="@dimen/place_cluster_size"/>
+
+	<TextView
+		android:id="@id/amu_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal|bottom"
+		android:alpha=".8"
+		android:textSize="@dimen/cluster_amount_text_size"
+		android:background="@drawable/shape_top_rounded_view"
+		android:backgroundTint="@color/colorPrimaryDark"
+		android:paddingLeft="@dimen/small_view_padding"
+		android:paddingRight="@dimen/small_view_padding"
+		android:textAppearance="@style/amu_Bubble.TextAppearance.Light"
+		android:textColor="@color/colorWhite"/>
+</FrameLayout>

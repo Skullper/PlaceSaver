@@ -2,8 +2,6 @@ package skullper.place.saver.screens.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,16 +17,20 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Marker;
+import com.google.maps.android.clustering.ClusterManager;
 
 import butterknife.BindView;
 import skullper.place.saver.R;
 import skullper.place.saver.base.EmptyPresenter;
 import skullper.place.saver.base.fragment.BaseFragment;
+import skullper.place.saver.data.PlaceItem;
 import skullper.place.saver.screens.MainActivity;
 import skullper.place.saver.utils.LocationHelper;
+import skullper.place.saver.utils.PlaceItemRenderer;
+
+import static skullper.place.saver.utils.PlaceItemRenderer.MIN_CLUSTER_SIZE;
 
 /**
  * Created by skullper on 29.06.18.
@@ -37,7 +39,8 @@ import skullper.place.saver.utils.LocationHelper;
  */
 
 public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> //
-        implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, LocationHelper.OnCurrentLocationListener {
+        implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, //
+        LocationHelper.OnCurrentLocationListener, GoogleMap.OnMarkerClickListener {
 
     private static final int RC_PERMISSIONS = 785;
 
@@ -46,8 +49,9 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     @BindView(R.id.pb_map)
     ProgressBar progressBar;
 
-    private GoogleMap      map;
-    private LocationHelper helper;
+    private GoogleMap                 map;
+    private LocationHelper            helper;
+    private ClusterManager<PlaceItem> clusterManager;
 
     @Override
     public String tag() {
@@ -73,7 +77,10 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        initClusterManager();
         map.setOnMapLongClickListener(this);
+        map.setOnMarkerClickListener(clusterManager);
+        map.setOnCameraIdleListener(clusterManager);
         checkLocationPermission();
     }
 
@@ -87,6 +94,19 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
         progressBar.setVisibility(View.GONE);
         Toast.makeText(activity, R.string.map_loading_toast, Toast.LENGTH_SHORT).show();
         selectCurrentLocation(location);
+    }
+
+    private boolean isInfoWindowShown = false;
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (isInfoWindowShown) {
+            marker.hideInfoWindow();
+        } else {
+            marker.showInfoWindow();
+        }
+        isInfoWindowShown = !isInfoWindowShown;
+        return true;
     }
 
     @Override
@@ -117,7 +137,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
 
     private void selectCurrentLocation(Location location) {
         LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
-        map.addMarker(new MarkerOptions().position(coordinates).title("Current position"));
+        addPlace(new PlaceItem(coordinates, "Current position"));
         map.moveCamera(CameraUpdateFactory.newLatLng(coordinates));
         map.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
@@ -125,6 +145,18 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     private void fetchUserLocation() {
         progressBar.setVisibility(View.VISIBLE);
         helper.retrieveLocation();
+    }
+
+    private void initClusterManager(){
+        clusterManager = new ClusterManager<>(activity, map);
+        PlaceItemRenderer renderer = new PlaceItemRenderer(activity, map, clusterManager);
+        renderer.setMinClusterSize(MIN_CLUSTER_SIZE);
+        clusterManager.setRenderer(renderer);
+        clusterManager.setAnimation(true);
+        clusterManager.setOnClusterItemClickListener(placeItem -> {
+            clusterManager.getMarkerCollection().setOnMarkerClickListener(this);
+            return false;
+        });
     }
 
     private void showPlaceCreationDialog(LatLng latLng) {
@@ -137,9 +169,8 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
         view.findViewById(R.id.btn_dialog_place_ok).setOnClickListener(v -> {
             // TODO: 29.06.18 save to db
             String placeName = etName.getText().toString();
-            if (!placeName.isEmpty() && !placeName.contains(" ")) {
-                map.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory //
-                        .fromBitmap(createMarkerBitmap())).title(placeName).position(latLng));
+            if (!placeName.isEmpty()) {
+                addPlace(new PlaceItem(latLng, placeName));
                 dialog.dismiss();
             } else {
                 Toast.makeText(activity, R.string.dialog_place_no_name_exception, Toast.LENGTH_SHORT).show();
@@ -147,12 +178,9 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
         });
     }
 
-    private Bitmap createMarkerBitmap() {
-        int markerSize = activity.getResources().getDimensionPixelSize(R.dimen.place_marker_size);
-        Bitmap bitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_gbk);
-        Bitmap markerBitmap = Bitmap.createScaledBitmap(bitmap, markerSize, markerSize, false);
-        bitmap.recycle();
-        return markerBitmap;
+    private void addPlace(PlaceItem item){
+        clusterManager.addItem(item);
+        clusterManager.cluster();
     }
 
     //Required by Google MapView

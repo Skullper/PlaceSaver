@@ -5,6 +5,7 @@
 	<dimen name="layout_margin">16dp</dimen>
 	<dimen name="view_padding">16dp</dimen>
 	<dimen name="small_view_padding">8dp</dimen>
+	<dimen name="tiny_View_padding">4dp</dimen>
 
 	<!--Views-->
 	<dimen name="rounded_view_corner">5dp</dimen>
@@ -22,11 +23,13 @@
 
 	<!--Places-->
 	<dimen name="place_item_height">88dp</dimen>
-	<dimen name="place_marker_size">56px</dimen>
+	<dimen name="place_marker_size">48dp</dimen>
+	<dimen name="place_cluster_size">56dp</dimen>
 
 	<!--TextSizes-->
 	<dimen name="place_item_title_text_size">16sp</dimen>
 	<dimen name="place_item_data_text_size">12sp</dimen>
 	<dimen name="et_text_size">16sp</dimen>
+	<dimen name="cluster_amount_text_size">12sp</dimen>
 
 </resources>

@@ -27,4 +27,5 @@
 	<!--Content descriptions-->
 	<string name="cd_arrow_right">Simple arrow added in list item</string>
 	<string name="cd_place">Image title in place creation dialog</string>
+	<string name="cd_cluster">Cluster image</string>
 </resources>
