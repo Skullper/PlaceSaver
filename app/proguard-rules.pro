@@ -19,9 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#PROJECT
 -optimizationpasses 3
 -allowaccessmodification
 -useuniqueclassmembernames
+-keep class skullper.place.saver.data.** { *; }
 
 # BUTTER KNIFE
 # Retain generated class which implement Unbinder.

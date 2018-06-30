@@ -46,16 +46,28 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
         LocationHelper.OnCurrentLocationListener, AppMapView, //
         GoogleMap.OnMarkerClickListener {
 
-    private static final int RC_PERMISSIONS = 785;
+    private static final int    RC_PERMISSIONS = 785;
+    private static final String ARG_PLACE      = "arg_place";
 
     @BindView(R.id.map)
     MapView     mapView;
     @BindView(R.id.pb_map)
     ProgressBar progressBar;
 
+    private boolean isInfoWindowShown = false;
     private GoogleMap                 map;
     private LocationHelper            helper;
     private ClusterManager<PlaceItem> clusterManager;
+    private PlaceItem                 focusPlace;
+    private PlaceItemRenderer         renderer;
+
+    public static AppMapFragment newInstance(PlaceItem item) {
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_PLACE, item);
+        AppMapFragment fragment = new AppMapFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public String tag() {
@@ -74,6 +86,10 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
 
     @Override
     protected void initViews(View rootView) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            focusPlace = arguments.getParcelable(ARG_PLACE);
+        }
         helper = new LocationHelper(activity, this);
         mapView.getMapAsync(this);
     }
@@ -97,11 +113,11 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
     @Override
     public void onLocationReady(Location location) {
         progressBar.setVisibility(View.GONE);
-        Toaster.getInstance().toast(R.string.map_loading_toast);
-        selectCurrentLocation(location);
+        if (focusPlace == null) {
+            Toaster.getInstance().toast(R.string.map_loading_toast);
+            selectCurrentLocation(location);
+        }
     }
-
-    private boolean isInfoWindowShown = false;
 
     @Override
     public boolean onMarkerClick(Marker marker) {
@@ -124,6 +140,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
         for (PlaceItem item : items) {
             addPlace(item);
         }
+        if (focusPlace != null) moveToPlace();
     }
 
     @Override
@@ -165,14 +182,12 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
 
     private void initClusterManager() {
         clusterManager = new ClusterManager<>(activity, map);
-        PlaceItemRenderer renderer = new PlaceItemRenderer(activity, map, clusterManager);
+        renderer = new PlaceItemRenderer(activity, map, clusterManager, //
+                this::shoInfoWindow);
         renderer.setMinClusterSize(MIN_CLUSTER_SIZE);
         clusterManager.setRenderer(renderer);
         clusterManager.setAnimation(true);
-        clusterManager.setOnClusterItemClickListener(placeItem -> {
-            clusterManager.getMarkerCollection().setOnMarkerClickListener(this);
-            return false;
-        });
+        clusterManager.getMarkerCollection().setOnMarkerClickListener(this);
     }
 
     private void showPlaceCreationDialog(LatLng latLng) {
@@ -196,6 +211,27 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
     private void addPlace(PlaceItem item) {
         clusterManager.addItem(item);
         clusterManager.cluster();
+    }
+
+    /**
+     * During animation render marker view. After it will be rendered infoWindow will be shown
+     */
+    private void moveToPlace() {
+        LatLng coordinates = new LatLng(focusPlace.getLat(), focusPlace.getLon());
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
+    }
+
+    /**
+     * Use only to show info window of marker passed from {@link PlacesFragment}
+     */
+    private void shoInfoWindow(@NonNull Marker marker) {
+        if (focusPlace != null) {
+            if (marker.getTitle().contentEquals(focusPlace.getTitle())) {
+                renderer.stopListening();
+                marker.showInfoWindow();
+                isInfoWindowShown = true;
+            }
+        }
     }
 
     //Required by Google MapView

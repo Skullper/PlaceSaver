@@ -48,6 +48,8 @@ dependencies {
     //utils
     implementation "com.jakewharton.timber:timber:${versions.timber}"
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    //noinspection GradleDependency downgraded because of error with 4.0.0
+    implementation 'com.firebaseui:firebase-ui-database:3.3.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

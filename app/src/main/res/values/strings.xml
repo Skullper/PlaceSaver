@@ -25,6 +25,10 @@
 	<string name="dialog_place_hint">Place name</string>
 	<string name="dialog_place_no_name_exception">You better type a name first</string>
 
+	<!--Places-->
+	<string name="places_loading">Fetching places…</string>
+	<string name="places_no_items">Currently you have no places created. Go to map tab and create some.\n</string>
+
 	<!--Content descriptions-->
 	<string name="cd_arrow_right">Simple arrow added in list item</string>
 	<string name="cd_place">Image title in place creation dialog</string>

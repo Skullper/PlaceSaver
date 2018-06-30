@@ -31,5 +31,6 @@
 	<dimen name="place_item_data_text_size">12sp</dimen>
 	<dimen name="et_text_size">16sp</dimen>
 	<dimen name="cluster_amount_text_size">12sp</dimen>
+	<dimen name="places_no_items_text_size">18sp</dimen>
 
 </resources>

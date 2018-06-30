@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-	android:id="@+id/rv_points"
+<FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:listitem="@layout/item_place"/>
+	android:layout_height="match_parent">
+
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/rv_places"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:listitem="@layout/item_place"/>
+
+	<TextView
+		android:id="@+id/tv_places_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="true"
+		android:drawableBottom="@drawable/ic_add"
+		android:focusable="true"
+		android:gravity="center"
+		android:padding="@dimen/view_padding"
+		android:text="@string/places_no_items"
+		android:textColor="@color/colorSecondaryText"
+		android:textSize="@dimen/places_no_items_text_size"
+		android:visibility="gone"/>
+
+	<ProgressBar
+		android:id="@+id/pb_places"
+		style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:indeterminate="true"/>
+
+</FrameLayout>

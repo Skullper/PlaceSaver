@@ -34,15 +34,28 @@ public class PlaceItemRenderer extends DefaultClusterRenderer<PlaceItem> {
 
     public static final int MIN_CLUSTER_SIZE = 3;
 
-    private final IconGenerator itemIconGenerator;
-    private final IconGenerator clusterIconGenerator;
-    private final ImageView     itemIcon;
-    private final Context       context;
+    private final IconGenerator            itemIconGenerator;
+    private final IconGenerator            clusterIconGenerator;
+    private final ImageView                itemIcon;
+    private final Context                  context;
+    private       OnMarkerRenderedListener listener;
+
+    /**
+     * Після багатьох спроб витягнути маркер з clusterManager, Renderer чи іншоми методами я здався
+     * і написав ось цей костиль, на мою думку. Була ще спокуса підключити android-maps-extensions,
+     * але відмовився від неї через дві причин: не було сенсу підключати зайву лібу тільки через те,
+     * щоб мати змогу дістати маркери з карти; прийшлося б переписувати все під лібу, а час вже було
+     * витрачено. Скоріш за все є легкий спосіб, але я його не знайшов(мені на таке везе).
+     */
+    public interface OnMarkerRenderedListener {
+        void onItemRendered(Marker marker);
+    }
 
     @SuppressLint("InflateParams")
-    public PlaceItemRenderer(Context context, GoogleMap map, ClusterManager<PlaceItem> clusterManager) {
+    public PlaceItemRenderer(Context context, GoogleMap map, ClusterManager<PlaceItem> clusterManager, OnMarkerRenderedListener listener) {
         super(context, map, clusterManager);
         this.context = context;
+        this.listener = listener;
         itemIconGenerator = new IconGenerator(context);
         clusterIconGenerator = new IconGenerator(context);
         //init marker view
@@ -57,9 +70,13 @@ public class PlaceItemRenderer extends DefaultClusterRenderer<PlaceItem> {
 
     @Override
     protected void onClusterItemRendered(PlaceItem clusterItem, Marker marker) {
+        if (listener != null) {
+            listener.onItemRendered(marker);
+        }
         Target target = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                Timber.d("Bitmap loaded");
                 itemIcon.setImageBitmap(bitmap);
                 Bitmap icon = itemIconGenerator.makeIcon();
                 marker.setIcon(BitmapDescriptorFactory.fromBitmap(icon));
@@ -77,7 +94,9 @@ public class PlaceItemRenderer extends DefaultClusterRenderer<PlaceItem> {
             }
         };
         Picasso.with(context).load(clusterItem.getImage()).priority(Picasso.Priority.HIGH) //
-                .noFade().noPlaceholder().into(target);
+                .into(target);
+        //When app just installed works only for one item. Dunno why
+        itemIcon.setTag(target);
     }
 
     @Override
@@ -91,4 +110,7 @@ public class PlaceItemRenderer extends DefaultClusterRenderer<PlaceItem> {
         return cluster.getSize() >= MIN_CLUSTER_SIZE;
     }
 
+    public void stopListening() {
+        listener = null;
+    }
 }

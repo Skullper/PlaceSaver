@@ -1,5 +1,7 @@
 package skullper.place.saver.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -15,13 +17,13 @@ import java.util.Map;
  * company - A2Lab
  */
 
-public class PlaceItem implements ClusterItem {
+public class PlaceItem implements ClusterItem, Parcelable {
 
+    private String uid;
+    private String image;
+    private String title;
     private double lat;
     private double lon;
-    private String title;
-    private String image;
-    private String uid;
 
     public PlaceItem() {
         //Default constructor used by Firebase Database
@@ -31,6 +33,14 @@ public class PlaceItem implements ClusterItem {
         this.lat = position.latitude;
         this.lon = position.longitude;
         this.title = placeName;
+    }
+
+    private PlaceItem(Parcel in) {
+        uid = in.readString();
+        image = in.readString();
+        title = in.readString();
+        lat = in.readDouble();
+        lon = in.readDouble();
     }
 
     @Exclude
@@ -95,5 +105,31 @@ public class PlaceItem implements ClusterItem {
         result.put("lat", lat);
         result.put("lon", lon);
         return result;
+    }
+
+    public static final Creator<PlaceItem> CREATOR = new Creator<PlaceItem>() {
+        @Override
+        public PlaceItem createFromParcel(Parcel in) {
+            return new PlaceItem(in);
+        }
+
+        @Override
+        public PlaceItem[] newArray(int size) {
+            return new PlaceItem[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
+        dest.writeString(image);
+        dest.writeString(title);
+        dest.writeDouble(lat);
+        dest.writeDouble(lon);
     }
 }

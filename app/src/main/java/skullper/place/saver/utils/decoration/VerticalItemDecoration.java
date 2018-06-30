@@ -15,17 +15,19 @@ import skullper.place.saver.R;
 
 public class VerticalItemDecoration extends RecyclerView.ItemDecoration {
 
-    private final int topPadding;
+    private final int padding;
     private final int botPadding;
 
     public VerticalItemDecoration() {
-        topPadding = App.getContext().getResources().getDimensionPixelOffset(R.dimen.view_padding);
+        padding = App.getContext().getResources().getDimensionPixelOffset(R.dimen.view_padding);
         botPadding = App.getContext().getResources().getDimensionPixelOffset(R.dimen.small_view_padding);
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        if (parent.getChildAdapterPosition(view) == 0) outRect.top = topPadding;
+        if (parent.getChildAdapterPosition(view) == 0) outRect.top = padding;
         outRect.bottom = botPadding;
+        outRect.left = padding;
+        outRect.right = padding;
     }
 }
