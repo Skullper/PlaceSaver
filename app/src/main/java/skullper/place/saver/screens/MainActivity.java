@@ -10,6 +10,7 @@ import skullper.place.saver.base.fragment.BaseFragment;
 import skullper.place.saver.data.PlaceItem;
 import skullper.place.saver.screens.fragments.AppMapFragment;
 import skullper.place.saver.screens.fragments.PlacesFragment;
+import skullper.place.saver.utils.TabFragment;
 
 /**
  * Created by skullper on 29.06.18.
@@ -27,6 +28,7 @@ public class MainActivity extends BaseActivity<EmptyPresenter> implements TabLay
             this.position = position;
         }
     }
+
     private PlaceItem placeItem = null;
 
     @BindView(R.id.tabs_main)
@@ -62,6 +64,7 @@ public class MainActivity extends BaseActivity<EmptyPresenter> implements TabLay
                 fragment = null;
                 break;
         }
+        setToolbarTitle(((TabFragment) fragment).getToolbarTitle());
         replaceFragment(R.id.container_main, fragment);
     }
 
@@ -80,6 +83,11 @@ public class MainActivity extends BaseActivity<EmptyPresenter> implements TabLay
         tableLayout.addTab(tableLayout.newTab().setText(R.string.tab_list));
         tableLayout.addTab(tableLayout.newTab().setText(R.string.tab_map));
         tableLayout.addTab(tableLayout.newTab().setText(R.string.tab_profile));
+    }
+
+    private void setToolbarTitle(String title) {
+        //noinspection ConstantConditions
+        getSupportActionBar().setTitle(title);
     }
 
     public void openMap(PlaceItem item) {

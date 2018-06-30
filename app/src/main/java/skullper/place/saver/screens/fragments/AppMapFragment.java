@@ -32,6 +32,8 @@ import skullper.place.saver.providers.impl.Toaster;
 import skullper.place.saver.screens.MainActivity;
 import skullper.place.saver.utils.LocationHelper;
 import skullper.place.saver.utils.PlaceItemRenderer;
+import skullper.place.saver.utils.StringUtils;
+import skullper.place.saver.utils.TabFragment;
 
 import static skullper.place.saver.utils.PlaceItemRenderer.MIN_CLUSTER_SIZE;
 
@@ -44,7 +46,7 @@ import static skullper.place.saver.utils.PlaceItemRenderer.MIN_CLUSTER_SIZE;
 public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
         implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, //
         LocationHelper.OnCurrentLocationListener, AppMapView, //
-        GoogleMap.OnMarkerClickListener {
+        GoogleMap.OnMarkerClickListener, TabFragment {
 
     private static final int    RC_PERMISSIONS = 785;
     private static final String ARG_PLACE      = "arg_place";
@@ -156,6 +158,11 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
                 }
             }
         }
+    }
+
+    @Override
+    public String getToolbarTitle() {
+        return StringUtils.getString(R.string.map_toolbar_title);
     }
 
     private void checkLocationPermission() {

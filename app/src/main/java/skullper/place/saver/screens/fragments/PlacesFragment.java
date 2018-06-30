@@ -26,6 +26,8 @@ import skullper.place.saver.base.fragment.BaseFragment;
 import skullper.place.saver.data.PlaceItem;
 import skullper.place.saver.providers.impl.Toaster;
 import skullper.place.saver.screens.MainActivity;
+import skullper.place.saver.utils.StringUtils;
+import skullper.place.saver.utils.TabFragment;
 import skullper.place.saver.utils.decoration.VerticalItemDecoration;
 
 import static skullper.place.saver.utils.Constantaz.TABLE_USER_PLACES;
@@ -39,7 +41,7 @@ import static skullper.place.saver.utils.Constantaz.TABLE_USER_PLACES;
 /**
  * This fragment used for displaying places created by user in map.
  */
-public class PlacesFragment extends BaseFragment<MainActivity, EmptyPresenter> {
+public class PlacesFragment extends BaseFragment<MainActivity, EmptyPresenter> implements TabFragment{
 
     private PlaceAdapter adapter;
     private Query        userPostsQuery;
@@ -92,6 +94,11 @@ public class PlacesFragment extends BaseFragment<MainActivity, EmptyPresenter> {
         adapter.stopListening();
         userPostsQuery.removeEventListener(valueEventListener);
         super.onStop();
+    }
+
+    @Override
+    public String getToolbarTitle() {
+        return StringUtils.getString(R.string.places_toolbar_title);
     }
 
     private void initRecycler() {

@@ -20,14 +20,19 @@
 	<string name="tab_profile">Profile</string>
 
 	<!--Map-->
+	<string name="map_toolbar_title">Discover places</string>
 	<string name="map_loading_toast">Fetching your coordinates…</string>
 	<string name="dialog_place_creation_title">Give a name to your selected point and create it!\nLeave a mark in history!</string>
 	<string name="dialog_place_hint">Place name</string>
 	<string name="dialog_place_no_name_exception">You better type a name first</string>
 
 	<!--Places-->
+	<string name="places_toolbar_title">Your places</string>
 	<string name="places_loading">Fetching places…</string>
 	<string name="places_no_items">Currently you have no places created. Go to map tab and create some.\n</string>
+
+	<!--Profile-->
+	<string name="profile_toolbar_title">Profile</string>
 
 	<!--Content descriptions-->
 	<string name="cd_arrow_right">Simple arrow added in list item</string>
