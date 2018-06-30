@@ -70,6 +70,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void firebaseAuthWithGoogle(AuthCredential credential) {
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    presenter.saveUser(user.getUid(), user.getEmail(), user.getPhotoUrl());
+                }
                 onLoggedIn();
             } else {
                 Exception exception = task.getException();
