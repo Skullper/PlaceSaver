@@ -29,10 +29,16 @@
 	<!--Places-->
 	<string name="places_toolbar_title">Your places</string>
 	<string name="places_loading">Fetching places…</string>
+	<string name="places_item_removed">Item was removed</string>
 	<string name="places_no_items">Currently you have no places created. Go to map tab and create some.\n</string>
+	<string name="places_remove_dialog_title">Attention</string>
+	<string name="places_remove_dialog_message">Do you really want to delete your place?</string>
+	<string name="places_remove_dialog_btn_ok">Delete</string>
+	<string name="places_remove_dialog_btn_cancel">Discard</string>
 
 	<!--Profile-->
 	<string name="profile_toolbar_title">Profile</string>
+	<string name="profile_btn_logout">Log out</string>
 
 	<!--Content descriptions-->
 	<string name="cd_arrow_right">Simple arrow added in list item</string>

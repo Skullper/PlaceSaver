@@ -6,6 +6,8 @@
         <item name="colorAccent">@color/colorAccent</item>
 		<item name="buttonStyle">@style/AppButton</item>
 		<item name="editTextStyle">@style/AppEditText</item>
+		<item name="android:windowBackground">@color/colorWindowBg</item>
+		<item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
 
 	<style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">

@@ -69,6 +69,7 @@ public class PlacesFragment extends BaseFragment<MainActivity, EmptyPresenter> i
         return new EmptyPresenter(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void initViews(View rootView) {
         Toaster.getInstance().toast(R.string.places_loading);
@@ -79,7 +80,7 @@ public class PlacesFragment extends BaseFragment<MainActivity, EmptyPresenter> i
         FirebaseRecyclerOptions<PlaceItem> options = new FirebaseRecyclerOptions.Builder<PlaceItem>() //
                 .setQuery(userPostsQuery, PlaceItem.class) //
                 .build();
-        adapter = new PlaceAdapter(options, item -> activity.openMap(item));
+        adapter = new PlaceAdapter(options, activity, item -> activity.openMap(item));
         initRecycler();
     }
 

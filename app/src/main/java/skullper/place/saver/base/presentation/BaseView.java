@@ -15,9 +15,4 @@ public interface BaseView {
 	 */
 	Context getContext();
 
-	/**
-	 * restarts app and clear all user data
-	 */
-	void logOut();
-
 }

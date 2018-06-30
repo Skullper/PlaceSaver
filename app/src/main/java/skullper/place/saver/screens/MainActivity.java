@@ -10,6 +10,7 @@ import skullper.place.saver.base.fragment.BaseFragment;
 import skullper.place.saver.data.PlaceItem;
 import skullper.place.saver.screens.fragments.AppMapFragment;
 import skullper.place.saver.screens.fragments.PlacesFragment;
+import skullper.place.saver.screens.fragments.ProfileFragment;
 import skullper.place.saver.utils.TabFragment;
 
 /**
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity<EmptyPresenter> implements TabLay
                 fragment = AppMapFragment.newInstance(placeItem);
                 break;
             case PROFILE:
-                fragment = null;
+                fragment = new ProfileFragment();
                 break;
         }
         setToolbarTitle(((TabFragment) fragment).getToolbarTitle());

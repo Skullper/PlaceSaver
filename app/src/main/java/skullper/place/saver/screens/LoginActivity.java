@@ -41,8 +41,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         return new LoginPresenter(this);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void initViews() {
+        getWindow().setBackgroundDrawableResource(R.drawable.bg_splash);
+        getSupportActionBar().setTitle(R.string.app_name);
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {

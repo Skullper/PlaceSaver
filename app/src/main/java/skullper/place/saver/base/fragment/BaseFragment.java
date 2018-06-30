@@ -109,11 +109,6 @@ public abstract class BaseFragment<A extends BaseActivity, P extends BasePresent
         return activity;
     }
 
-    @Override
-    public void logOut() {
-        activity.logOut();
-    }
-
     /**
      * Use this to replace fragment in current container with allowing state loss
      *

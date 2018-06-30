@@ -72,11 +72,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         return this;
     }
 
-    @Override
-    public void logOut() {
-        // TODO: 28.06.18 implement user logout case
-    }
-
     /**
      * Use this to replace fragment in current container with allowing state loss
      *

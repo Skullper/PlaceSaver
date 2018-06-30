@@ -14,4 +14,5 @@ import skullper.place.saver.data.PlaceItem;
 public interface OnPlaceSelectedListener {
 
     void onPlaceSelected(PlaceItem item);
+
 }

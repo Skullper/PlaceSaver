@@ -15,6 +15,9 @@
 		android:id="@+id/tabs_main"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/main_tab_layout_height"
+		android:background="@color/colorPrimaryLight"
 		android:layout_gravity="bottom"
+		app:tabTextColor="@color/colorWindowBg"
+		app:tabSelectedTextColor="@color/colorWhite"
 		app:tabMode="fixed"/>
 </FrameLayout>
