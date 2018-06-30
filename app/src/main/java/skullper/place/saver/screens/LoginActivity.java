@@ -3,15 +3,19 @@ package skullper.place.saver.screens;
 import android.content.Intent;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.OnClick;
 import skullper.place.saver.R;
 import skullper.place.saver.base.activity.BaseActivity;
 import skullper.place.saver.mvp.presenters.LoginPresenter;
 import skullper.place.saver.mvp.views.LoginView;
-import skullper.place.saver.providers.impl.TempStorage;
 import skullper.place.saver.providers.impl.Toaster;
 
 /**
@@ -22,8 +26,10 @@ import skullper.place.saver.providers.impl.Toaster;
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginView {
 
-    private GoogleSignInClient googleClient;
     private static final int RC_SIGN_IN = 154;
+
+    private GoogleSignInClient googleClient;
+    private FirebaseAuth       firebaseAuth;
 
     @Override
     protected int getLayoutId() {
@@ -37,10 +43,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     protected void initViews() {
-        if (TempStorage.getInstance().getEmail().isEmpty()) {
-            initGoogleSignInClient();
-        } else {
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
             onLoggedIn();
+        } else {
+            initGoogleSignInClient();
         }
     }
 
@@ -48,18 +56,28 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            presenter.handleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data));
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            presenter.handleSignInResult(task);
         }
-    }
-
-    @Override
-    public void onLoggedIn() {
-        startAffinity(new Intent(this, MainActivity.class));
     }
 
     @Override
     public void onLoginError(String message) {
         Toaster.getInstance().toast(message);
+    }
+
+    @Override
+    public void firebaseAuthWithGoogle(AuthCredential credential) {
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                onLoggedIn();
+            } else {
+                Exception exception = task.getException();
+                if (exception != null) {
+                    onLoginError(exception.getMessage());
+                }
+            }
+        });
     }
 
     @OnClick(R.id.login_btn)
@@ -70,8 +88,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     private void initGoogleSignInClient() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN) //
-                .requestEmail() //
+                .requestIdToken(getString(R.string.web_client_id)).requestEmail() //
                 .build();
         googleClient = GoogleSignIn.getClient(this, gso);
     }
+
+    private void onLoggedIn() {
+        startAffinity(new Intent(this, MainActivity.class));
+    }
+
 }

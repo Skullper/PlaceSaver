@@ -16,6 +16,7 @@ import skullper.place.saver.providers.TempStorageProvider;
 /**
  * Class for fast saving small data using SharedPreference
  */
+@SuppressWarnings("unused")
 public final class TempStorage implements TempStorageProvider {
 
     private static volatile TempStorage       instance;

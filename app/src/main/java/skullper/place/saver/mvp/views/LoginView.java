@@ -1,5 +1,7 @@
 package skullper.place.saver.mvp.views;
 
+import com.google.firebase.auth.AuthCredential;
+
 import skullper.place.saver.base.presentation.BaseView;
 
 /**
@@ -10,7 +12,7 @@ import skullper.place.saver.base.presentation.BaseView;
 
 public interface LoginView extends BaseView {
 
-    void onLoggedIn();
-
     void onLoginError(String message);
+
+    void firebaseAuthWithGoogle(AuthCredential credential);
 }

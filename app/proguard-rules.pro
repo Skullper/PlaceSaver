@@ -31,3 +31,20 @@
 -keep class butterknife.*
 -keepclasseswithmembernames class * { @butterknife.* <methods>; }
 -keepclasseswithmembernames class * { @butterknife.* <fields>; }
+
+#FIREBASE
+-keepattributes Signature
+
+# This rule will properly ProGuard all the model classes in
+# the package com.yourcompany.models. Modify to fit the structure
+# of your app.
+-keepclassmembers class com.yourcompany.models.** {
+  *;
+}
+
+#TIMBER
+-assumenosideeffects class timber.log.Timber* {
+    public static *** v(...);
+    public static *** d(...);
+    public static *** i(...);
+}

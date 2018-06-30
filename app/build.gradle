@@ -38,9 +38,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-media-compat'
         exclude group: 'com.android.support', module: 'support-v4'
     }
+    implementation "com.google.firebase:firebase-core:${versions.firebase}"
+    implementation "com.google.firebase:firebase-database:${versions.firebase}"
+    //noinspection GradleDependency
+    implementation "com.google.firebase:firebase-auth:${versions.firebase}"
     //views
     implementation "com.jakewharton:butterknife:${versions.butter}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${versions.butter}"
     //utils
     implementation "com.jakewharton.timber:timber:${versions.timber}"
 }
+
+apply plugin: 'com.google.gms.google-services'

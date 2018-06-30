@@ -2,6 +2,7 @@
     <string name="app_name">PlaceSaver</string>
 	<string name="google_maps_api_key"
 		translatable="false">AIzaSyBB_nhnsleKvgOb6ZX1M1XiEnfEUvT5TpM</string>
+	<string name="web_client_id">818439907303-af035r7lcn1v7qomstbqosam3jvbnmd2.apps.googleusercontent.com</string>
 
 	<!--Login activity-->
 	<string name="auth_btn">Sign in</string>
