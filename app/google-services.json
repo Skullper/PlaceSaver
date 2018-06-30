@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "818439907303",
+    "firebase_url": "https://placesaver-1530188446959.firebaseio.com",
+    "project_id": "placesaver-1530188446959",
+    "storage_bucket": "placesaver-1530188446959.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818439907303:android:f66e6128ceba9a1d",
+        "android_client_info": {
+          "package_name": "skullper.place.saver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818439907303-87m8gnbtafgba9mvg8on932emn1tqkkv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCftbOSuNeJu86fLzg1Dj-Nl2eYJ3aHe6Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,8 +10,12 @@ import android.support.annotation.NonNull;
 
 public class User {
 
-    private final String email;
-    private final String imageUrl;
+    private String email;
+    private String imageUrl;
+
+    public User() {
+        //Default constructor used by Firebase Database
+    }
 
     public User(@NonNull String email, @NonNull String imageUrl) {
         this.email = email;

@@ -20,11 +20,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.clustering.ClusterManager;
 
+import java.util.List;
+
 import butterknife.BindView;
 import skullper.place.saver.R;
-import skullper.place.saver.base.EmptyPresenter;
 import skullper.place.saver.base.fragment.BaseFragment;
 import skullper.place.saver.data.PlaceItem;
+import skullper.place.saver.mvp.presenters.MapPresenter;
+import skullper.place.saver.mvp.views.AppMapView;
 import skullper.place.saver.providers.impl.Toaster;
 import skullper.place.saver.screens.MainActivity;
 import skullper.place.saver.utils.LocationHelper;
@@ -38,9 +41,10 @@ import static skullper.place.saver.utils.PlaceItemRenderer.MIN_CLUSTER_SIZE;
  * company - A2Lab
  */
 
-public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> //
+public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
         implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, //
-        LocationHelper.OnCurrentLocationListener, GoogleMap.OnMarkerClickListener {
+        LocationHelper.OnCurrentLocationListener, AppMapView, //
+        GoogleMap.OnMarkerClickListener {
 
     private static final int RC_PERMISSIONS = 785;
 
@@ -64,8 +68,8 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     }
 
     @Override
-    protected EmptyPresenter createPresenter() {
-        return new EmptyPresenter(this);
+    protected MapPresenter createPresenter() {
+        return new MapPresenter(this);
     }
 
     @Override
@@ -78,6 +82,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         initClusterManager();
+        presenter.fetchPlaces();
         map.setOnMapLongClickListener(this);
         map.setOnMarkerClickListener(clusterManager);
         map.setOnCameraIdleListener(clusterManager);
@@ -110,6 +115,18 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     }
 
     @Override
+    public void onPlaceSaved(@NonNull PlaceItem item) {
+        addPlace(item);
+    }
+
+    @Override
+    public void onPlacesFetched(List<PlaceItem> items) {
+        for (PlaceItem item : items) {
+            addPlace(item);
+        }
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, //
                                            @NonNull int[] grantResults) {
         if (requestCode == RC_PERMISSIONS) {
@@ -138,8 +155,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
     private void selectCurrentLocation(Location location) {
         LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
         addPlace(new PlaceItem(coordinates, "Current position"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(coordinates));
-        map.animateCamera(CameraUpdateFactory.zoomTo(15));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
     }
 
     private void fetchUserLocation() {
@@ -147,7 +163,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
         helper.retrieveLocation();
     }
 
-    private void initClusterManager(){
+    private void initClusterManager() {
         clusterManager = new ClusterManager<>(activity, map);
         PlaceItemRenderer renderer = new PlaceItemRenderer(activity, map, clusterManager);
         renderer.setMinClusterSize(MIN_CLUSTER_SIZE);
@@ -167,10 +183,9 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
         EditText etName = view.findViewById(R.id.et_dialog_place);
         view.findViewById(R.id.btn_dialog_place_cancel).setOnClickListener(v -> dialog.dismiss());
         view.findViewById(R.id.btn_dialog_place_ok).setOnClickListener(v -> {
-            // TODO: 29.06.18 save to db
             String placeName = etName.getText().toString();
             if (!placeName.isEmpty()) {
-                addPlace(new PlaceItem(latLng, placeName));
+                presenter.savePlace(new PlaceItem(latLng, placeName));
                 dialog.dismiss();
             } else {
                 Toaster.getInstance().toast(R.string.dialog_place_no_name_exception);
@@ -178,7 +193,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, EmptyPresenter> /
         });
     }
 
-    private void addPlace(PlaceItem item){
+    private void addPlace(PlaceItem item) {
         clusterManager.addItem(item);
         clusterManager.cluster();
     }

@@ -16,6 +16,7 @@ import skullper.place.saver.base.presentation.BasePresenter;
 import skullper.place.saver.data.User;
 import skullper.place.saver.mvp.views.LoginView;
 
+import static skullper.place.saver.utils.Constantaz.TABLE_USERS;
 import static skullper.place.saver.utils.StringUtils.getString;
 
 /**
@@ -45,7 +46,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     public void saveUser(String userId, String email, Uri image) {
         if (userId != null && email != null && image != null) {
-            database.child("users").child(userId).setValue(new User(email, image.toString()));
+            database.child(TABLE_USERS).child(userId).setValue(new User(email, image.toString()));
         }
     }
 

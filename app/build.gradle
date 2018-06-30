@@ -47,6 +47,7 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:${versions.butter}"
     //utils
     implementation "com.jakewharton.timber:timber:${versions.timber}"
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
