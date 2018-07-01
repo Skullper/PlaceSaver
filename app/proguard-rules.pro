@@ -24,7 +24,25 @@
 -optimizationpasses 3
 -allowaccessmodification
 -useuniqueclassmembernames
--keep class skullper.place.saver.data.** { *; }
+
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Fragment
+-keep public class * extends android.support.v4.app.Fragment
+
+# The Maps API uses serialization and custom parcelables.
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+-keepclassmembers class * implements android.os.Parcelable {
+    static *** CREATOR;
+}
+-keep class com.google.android.gms.maps.** { *; }
+-keep interface com.google.android.gms.maps.** { *; }
 
 # BUTTER KNIFE
 # Retain generated class which implement Unbinder.
@@ -41,9 +59,8 @@
 # This rule will properly ProGuard all the model classes in
 # the package com.yourcompany.models. Modify to fit the structure
 # of your app.
--keepclassmembers class com.yourcompany.models.** {
-  *;
-}
+-keep class skullper.place.saver.data.** { *; }
+-keep class com.firebase.** { *; }
 
 #TIMBER
 -assumenosideeffects class timber.log.Timber* {

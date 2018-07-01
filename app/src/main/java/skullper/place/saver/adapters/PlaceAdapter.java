@@ -68,13 +68,14 @@ public class PlaceAdapter extends FirebaseRecyclerAdapter<PlaceItem, PlaceAdapte
     }
 
     private void attachItemClickListeners(PlaceViewHolder holder) {
-        final int selectedPosition = holder.getAdapterPosition();
         holder.itemView.setOnClickListener(view -> {
+            int selectedPosition = holder.getAdapterPosition();
             if (selectedPosition != RecyclerView.NO_POSITION) {
                 listener.onPlaceSelected(getItem(selectedPosition));
             }
         });
         holder.itemView.setOnLongClickListener(v -> {
+            int selectedPosition = holder.getAdapterPosition();
             if (selectedPosition != RecyclerView.NO_POSITION) {
                 createDeletionDialog(selectedPosition);
             }
@@ -123,7 +124,7 @@ public class PlaceAdapter extends FirebaseRecyclerAdapter<PlaceItem, PlaceAdapte
         allPlaces.addListenerForSingleValueEvent(onPlaceDeleteEvent);
     }
 
-    class PlaceViewHolder extends RecyclerView.ViewHolder {
+    public static class PlaceViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_item_place_title)
         TextView tvTitle;
@@ -138,7 +139,7 @@ public class PlaceAdapter extends FirebaseRecyclerAdapter<PlaceItem, PlaceAdapte
         }
 
         @SuppressLint("SetTextI18n")
-        void bind(PlaceItem item) {
+        public void bind(PlaceItem item) {
             tvTitle.setText(item.getTitle());
             tvLat.setText(Double.toString(item.getLat()));
             tvLon.setText(Double.toString(item.getLon()));

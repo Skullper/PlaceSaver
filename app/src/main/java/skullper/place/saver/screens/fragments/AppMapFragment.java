@@ -139,7 +139,6 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
         for (PlaceItem item : items) {
             addPlace(item);
         }
-        clusterManager.cluster();
         if (focusPlace != null) moveToPlace();
     }
 
@@ -179,7 +178,6 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
     private void showCurrentLocation(Location location) {
         LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
         addPlace(new PlaceItem(coordinates, "Current position"));
-        clusterManager.cluster();
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
     }
 
@@ -221,7 +219,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
 
     private void addPlace(PlaceItem item) {
         clusterManager.addItem(item);
-//        clusterManager.cluster();
+        clusterManager.cluster();
     }
 
     /**
