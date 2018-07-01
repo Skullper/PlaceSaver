@@ -15,6 +15,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
@@ -62,20 +63,21 @@ public class PlaceAdapter extends FirebaseRecyclerAdapter<PlaceItem, PlaceAdapte
         View view = LayoutInflater.from(parent.getContext()) //
                 .inflate(R.layout.item_place, parent, false);
         PlaceViewHolder holder = new PlaceViewHolder(view);
-        attachItemSelectListener(holder);
+        attachItemClickListeners(holder);
         return holder;
     }
 
-    private void attachItemSelectListener(PlaceViewHolder holder) {
+    private void attachItemClickListeners(PlaceViewHolder holder) {
+        final int selectedPosition = holder.getAdapterPosition();
         holder.itemView.setOnClickListener(view -> {
-            int selectedPosition = holder.getAdapterPosition();
             if (selectedPosition != RecyclerView.NO_POSITION) {
                 listener.onPlaceSelected(getItem(selectedPosition));
             }
         });
         holder.itemView.setOnLongClickListener(v -> {
-            int selectedPosition = holder.getAdapterPosition();
-            createDeletionDialog(selectedPosition);
+            if (selectedPosition != RecyclerView.NO_POSITION) {
+                createDeletionDialog(selectedPosition);
+            }
             return false;
         });
     }
@@ -88,7 +90,7 @@ public class PlaceAdapter extends FirebaseRecyclerAdapter<PlaceItem, PlaceAdapte
                     removeItemFromAllPlaces(getRef(position).getKey());
                     getRef(position).removeValue((databaseError, databaseReference) -> {
                         Toaster.getInstance().toast(R.string.places_item_removed);
-                        //notifyItemRemoved was not working properly. Replace pre last item by last
+                        //notifyItemRemoved was not working properly. Replaces pre last item by last item
                         notifyDataSetChanged();
                     });
                     dialog.dismiss();
@@ -97,8 +99,11 @@ public class PlaceAdapter extends FirebaseRecyclerAdapter<PlaceItem, PlaceAdapte
                 .create().show();
     }
 
+    private ValueEventListener onPlaceDeleteEvent;
+
     private void removeItemFromAllPlaces(String key) {
-        FirebaseDatabase.getInstance().getReference().child(TABLE_PLACES).addListenerForSingleValueEvent(new ValueEventListener() {
+        Query allPlaces = FirebaseDatabase.getInstance().getReference().child(TABLE_PLACES);
+        onPlaceDeleteEvent = new ValueEventListener() {
             @SuppressWarnings("ConstantConditions")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -106,13 +111,16 @@ public class PlaceAdapter extends FirebaseRecyclerAdapter<PlaceItem, PlaceAdapte
                     if (snap.getKey().contentEquals(key)) {
                         snap.getRef().removeValue();
                     }
+                    //No need in this listener anymore
+                    allPlaces.removeEventListener(onPlaceDeleteEvent);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Timber.e(databaseError.toException());
             }
-        });
+        };
+        allPlaces.addListenerForSingleValueEvent(onPlaceDeleteEvent);
     }
 
     class PlaceViewHolder extends RecyclerView.ViewHolder {

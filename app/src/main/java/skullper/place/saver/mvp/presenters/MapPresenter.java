@@ -35,8 +35,7 @@ import static skullper.place.saver.utils.Constantaz.USER_PLACES_LOCATION;
 
 public class MapPresenter extends BasePresenter<AppMapView> {
 
-    private final DatabaseReference  database;
-    private       ValueEventListener itemsFetchEventListener;
+    private final DatabaseReference database;
 
     public MapPresenter(AppMapView view) {
         super(view);
@@ -73,7 +72,7 @@ public class MapPresenter extends BasePresenter<AppMapView> {
     }
 
     public void fetchPlaces() {
-        itemsFetchEventListener = new ValueEventListener() {
+        ValueEventListener itemsFetchEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) { //if places exists
@@ -83,8 +82,6 @@ public class MapPresenter extends BasePresenter<AppMapView> {
                         items.add(iterator.next().getValue(PlaceItem.class));
                     }
                     if (view != null) view.onPlacesFetched(items);
-                    //Remove because can be triggered even when fetchPlaces() not called
-                    database.child(TABLE_PLACES).removeEventListener(itemsFetchEventListener);
                 }
             }
 
@@ -94,7 +91,7 @@ public class MapPresenter extends BasePresenter<AppMapView> {
                         databaseError.getCode());
             }
         };
-        database.child(TABLE_PLACES).addValueEventListener(itemsFetchEventListener);
+        database.child(TABLE_PLACES).addListenerForSingleValueEvent(itemsFetchEventListener);
     }
 
 }

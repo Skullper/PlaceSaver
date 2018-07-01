@@ -70,4 +70,5 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         }
         return getString(message);
     }
+
 }

@@ -11,12 +11,16 @@ import com.google.maps.android.clustering.ClusterItem;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
+/*
  * Created by skullper on 29.06.18.
  * Contact the developer - sckalper@gmail.com
  * company - A2Lab
  */
 
+/**
+ * This class describes place in {@link skullper.place.saver.screens.fragments.PlacesFragment} and
+ * {@link skullper.place.saver.screens.fragments.AppMapFragment}.
+ */
 public class PlaceItem implements ClusterItem, Parcelable {
 
     private String uid;

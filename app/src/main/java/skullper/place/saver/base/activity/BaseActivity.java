@@ -84,18 +84,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     /**
-     * Use this to add fragment into backstack above existing fragment allowing state loss
-     *
-     * @param containerId view where fragment will be added
-     * @param fragment    new fragment
-     */
-    protected void addFragment(@IdRes int containerId, @NonNull BaseFragment fragment) {
-        getSupportFragmentManager().beginTransaction()//
-                .add(containerId, fragment, fragment.tag()).addToBackStack(fragment.tag()) //
-                .commitAllowingStateLoss();
-    }
-
-    /**
      * Start new activity and finish current
      */
     protected void startAffinity(Intent intent) {

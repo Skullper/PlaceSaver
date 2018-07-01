@@ -6,6 +6,8 @@ package skullper.place.saver.adapters;
  * company - A2Lab
  */
 
+import android.support.annotation.NonNull;
+
 import skullper.place.saver.data.PlaceItem;
 
 /**
@@ -13,6 +15,6 @@ import skullper.place.saver.data.PlaceItem;
  */
 public interface OnPlaceSelectedListener {
 
-    void onPlaceSelected(PlaceItem item);
+    void onPlaceSelected(@NonNull PlaceItem item);
 
 }

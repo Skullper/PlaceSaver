@@ -2,7 +2,6 @@ package skullper.place.saver.base.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -107,28 +106,6 @@ public abstract class BaseFragment<A extends BaseActivity, P extends BasePresent
     @Override
     public Context getContext() {
         return activity;
-    }
-
-    /**
-     * Use this to replace fragment in current container with allowing state loss
-     *
-     * @param containerId view where fragment will be replaced
-     * @param fragment    new fragment
-     */
-    protected void replaceFragment(@IdRes int containerId, BaseFragment fragment) {
-        getChildFragmentManager().beginTransaction().replace(containerId, fragment, fragment.tag()) //
-                .commitAllowingStateLoss();
-    }
-
-    /**
-     * Use this to add fragment into backstack above existing fragment allowing state loss
-     *
-     * @param containerId view where fragment will be added
-     * @param fragment    new fragment
-     */
-    protected void addFragment(@IdRes int containerId, BaseFragment fragment) {
-        getChildFragmentManager().beginTransaction().add(containerId, fragment, fragment.tag()) //
-                .commitAllowingStateLoss();
     }
 
 }

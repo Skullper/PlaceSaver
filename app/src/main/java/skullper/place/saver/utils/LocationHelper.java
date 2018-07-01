@@ -13,6 +13,8 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
+import timber.log.Timber;
+
 /*
  * Created by skullper on 29.06.18.
  * Contact the developer - sckalper@gmail.com
@@ -48,22 +50,23 @@ public class LocationHelper implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
+        //Empty impl
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-
+        //Empty impl
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        //Empty impl
     }
 
     public void retrieveLocation() {
         locationClient.getLastLocation().addOnSuccessListener(activity, location -> {
             if (location != null) {
+                Timber.e("Location client");
                 listener.onLocationReady(location);
             } else {
                 getCurrentLocation();
@@ -73,7 +76,7 @@ public class LocationHelper implements LocationListener {
 
     private void getCurrentLocation() {
         // Get location from GPS if it's available
-        Location location = null;
+        Location location;
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         // Location wasn't found, check the next most accurate place for the current location
         if (location == null) {

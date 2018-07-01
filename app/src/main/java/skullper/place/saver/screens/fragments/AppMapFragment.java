@@ -115,10 +115,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
     @Override
     public void onLocationReady(Location location) {
         progressBar.setVisibility(View.GONE);
-        if (focusPlace == null) {
-            Toaster.getInstance().toast(R.string.map_loading_toast);
-            selectCurrentLocation(location);
-        }
+        showCurrentLocation(location);
     }
 
     @Override
@@ -142,6 +139,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
         for (PlaceItem item : items) {
             addPlace(item);
         }
+        clusterManager.cluster();
         if (focusPlace != null) moveToPlace();
     }
 
@@ -149,13 +147,15 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, //
                                            @NonNull int[] grantResults) {
         if (requestCode == RC_PERMISSIONS) {
+            boolean isPermissionsGranted = true;
             for (int grantResult : grantResults) {
-                if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                    fetchUserLocation();
-                } else {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, //
-                            Manifest.permission.ACCESS_FINE_LOCATION}, RC_PERMISSIONS);
-                }
+                if (grantResult != PackageManager.PERMISSION_GRANTED) isPermissionsGranted = false;
+            }
+            if (isPermissionsGranted) {
+                fetchUserLocation();
+            } else {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, //
+                        Manifest.permission.ACCESS_FINE_LOCATION}, RC_PERMISSIONS);
             }
         }
     }
@@ -176,15 +176,19 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
         }
     }
 
-    private void selectCurrentLocation(Location location) {
+    private void showCurrentLocation(Location location) {
         LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
         addPlace(new PlaceItem(coordinates, "Current position"));
+        clusterManager.cluster();
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
     }
 
     private void fetchUserLocation() {
-        progressBar.setVisibility(View.VISIBLE);
-        helper.retrieveLocation();
+        if (focusPlace == null) { //map tab clicked
+            progressBar.setVisibility(View.VISIBLE);
+            Toaster.getInstance().toast(R.string.map_loading_toast);
+            helper.retrieveLocation();
+        }
     }
 
     private void initClusterManager() {
@@ -217,7 +221,7 @@ public class AppMapFragment extends BaseFragment<MainActivity, MapPresenter> //
 
     private void addPlace(PlaceItem item) {
         clusterManager.addItem(item);
-        clusterManager.cluster();
+//        clusterManager.cluster();
     }
 
     /**

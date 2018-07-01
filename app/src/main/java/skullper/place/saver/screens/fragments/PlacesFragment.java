@@ -9,28 +9,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import butterknife.BindView;
 import skullper.place.saver.R;
 import skullper.place.saver.adapters.PlaceAdapter;
-import skullper.place.saver.base.EmptyPresenter;
 import skullper.place.saver.base.fragment.BaseFragment;
 import skullper.place.saver.data.PlaceItem;
+import skullper.place.saver.mvp.presenters.PlacesPresenter;
+import skullper.place.saver.mvp.views.PlacesView;
 import skullper.place.saver.providers.impl.Toaster;
 import skullper.place.saver.screens.MainActivity;
 import skullper.place.saver.utils.StringUtils;
 import skullper.place.saver.utils.TabFragment;
 import skullper.place.saver.utils.decoration.VerticalItemDecoration;
-
-import static skullper.place.saver.utils.Constantaz.TABLE_USER_PLACES;
 
 /*
  * Created by skullper on 29.06.18.
@@ -41,10 +36,10 @@ import static skullper.place.saver.utils.Constantaz.TABLE_USER_PLACES;
 /**
  * This fragment used for displaying places created by user in map.
  */
-public class PlacesFragment extends BaseFragment<MainActivity, EmptyPresenter> implements TabFragment{
+public class PlacesFragment extends BaseFragment<MainActivity, PlacesPresenter> implements TabFragment, PlacesView {
 
-    private PlaceAdapter adapter;
-    private Query        userPostsQuery;
+    private PlaceAdapter       adapter;
+    private Query              userPostsQuery;
     private ValueEventListener valueEventListener;
 
     @BindView(R.id.rv_places)
@@ -65,22 +60,15 @@ public class PlacesFragment extends BaseFragment<MainActivity, EmptyPresenter> i
     }
 
     @Override
-    protected EmptyPresenter createPresenter() {
-        return new EmptyPresenter(this);
+    protected PlacesPresenter createPresenter() {
+        return new PlacesPresenter(this);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void initViews(View rootView) {
         Toaster.getInstance().toast(R.string.places_loading);
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        userPostsQuery = database.child(TABLE_USER_PLACES).child(user.getUid()).orderByChild("title");
-        checkItemSize();
-        FirebaseRecyclerOptions<PlaceItem> options = new FirebaseRecyclerOptions.Builder<PlaceItem>() //
-                .setQuery(userPostsQuery, PlaceItem.class) //
-                .build();
-        adapter = new PlaceAdapter(options, activity, item -> activity.openMap(item));
+        presenter.getPlaces();
         initRecycler();
     }
 
@@ -102,12 +90,22 @@ public class PlacesFragment extends BaseFragment<MainActivity, EmptyPresenter> i
         return StringUtils.getString(R.string.places_toolbar_title);
     }
 
+    @Override
+    public void onPlacesFetched(Query query) {
+        userPostsQuery = query;
+        checkItemSize();
+        FirebaseRecyclerOptions<PlaceItem> options = new FirebaseRecyclerOptions.Builder<PlaceItem>() //
+                .setQuery(query, PlaceItem.class) //
+                .build();
+        adapter = new PlaceAdapter(options, activity, item -> activity.openMap(item));
+        rvPoints.setAdapter(adapter);
+    }
+
     private void initRecycler() {
         rvPoints.setLayoutManager(new LinearLayoutManager(activity));
         rvPoints.setItemAnimator(new DefaultItemAnimator());
         rvPoints.addItemDecoration(new VerticalItemDecoration());
         rvPoints.setHasFixedSize(true);
-        rvPoints.setAdapter(adapter);
     }
 
     /**
